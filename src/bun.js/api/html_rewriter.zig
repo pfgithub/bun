@@ -1515,10 +1515,11 @@ pub const Element = struct {
 
         var slice = name.toSlice(bun.default_allocator);
         defer slice.deinit();
-        var attr = this.element.?.getAttribute(slice.slice());
 
-        if (attr.len == 0)
+        if (!(this.element.?.hasAttribute(slice.slice()) catch return throwLOLHTMLError(globalObject)))
             return JSValue.jsNull();
+
+        var attr = this.element.?.getAttribute(slice.slice());
 
         return attr.toJS(globalObject);
     }
